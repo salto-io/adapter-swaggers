@@ -21,7 +21,7 @@ jobs:
       - name: Open PR
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: "latest"
+          branch: "latest-zuora"
           base: main
           title: "Update Zuora Swagger"
           committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
