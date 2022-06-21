@@ -1,0 +1,31 @@
+name: Fetch Swaggers
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  fetch-zuora-swaggers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Extract git commit data
+        uses: rlespinasse/git-commit-data-action@v1.x
+
+      - name: Fetch Zuora Swagger
+        run: wget -O zuora_billing/swagger.yaml https://assets.zuora.com/zuora-documentation/swagger.yaml
+
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: "latest-zuora"
+          base: main
+          title: "Update Zuora Swagger"
+          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
+          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
+          body: Update Zuora Swagger
+          commit-message: Auto update Zuora swagger
+          token: ${{ secrets.GITHUB_TOKEN }}
