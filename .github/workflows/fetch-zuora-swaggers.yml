@@ -1,4 +1,4 @@
-name: Fetch Swaggers
+name: Fetch Zuora Swaggers
 
 on:
   workflow_dispatch:

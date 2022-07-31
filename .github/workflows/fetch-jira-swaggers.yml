@@ -1,0 +1,49 @@
+name: Fetch Jira Swaggers
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  fetch-swaggers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Extract git commit data
+        uses: rlespinasse/git-commit-data-action@v1.x
+
+      - name: Create Jira folder
+        run: mkdir -p jira
+
+      - name: Fetch Software Swagger
+        run: wget -O jira/software-swagger.v3.json https://developer.atlassian.com/cloud/jira/software/swagger.v3.json
+
+      - name: Prettify Software Swagger
+        run: python -m json.tool jira/software-swagger.v3.json > jira/software-swagger.v3.pretty.json
+
+      - name: Fetch Platform V3 Swagger
+        run: wget -O jira/platform-swagger.v3.json https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json
+
+      - name: Prettify Platform V3 Swagger
+        run: python -m json.tool jira/platform-swagger.v3.json > jira/platform-swagger.v3.pretty.json
+
+      - name: Fetch Platform V2 Swagger
+        run: wget -O jira/platform-swagger.v2.json https://developer.atlassian.com/cloud/jira/platform/swagger.v3.json
+
+      - name: Prettify Platform V2 Swagger
+        run: python -m json.tool jira/platform-swagger.v2.json > jira/platform-swagger.v2.pretty.json
+
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: "latest-jira"
+          base: main
+          title: "Update Jira Swaggers"
+          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
+          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
+          body: Update Jira Swaggers
+          commit-message: Auto update Jira swaggers
+          token: ${{ secrets.GITHUB_TOKEN }}
