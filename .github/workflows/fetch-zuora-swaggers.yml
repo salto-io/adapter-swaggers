@@ -16,7 +16,7 @@ jobs:
         uses: rlespinasse/git-commit-data-action@v1.x
 
       - name: Fetch Zuora Swagger
-        run: curl https://assets.zuora.com/zuora-documentation/swagger.yaml -o zuora_billing/swagger.yaml
+        run: curl -L https://assets.zuora.com/zuora-documentation/swagger.yaml -o zuora_billing/swagger.yaml
 
       - name: Open PR
         uses: peter-evans/create-pull-request@v3
