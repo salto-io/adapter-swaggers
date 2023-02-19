@@ -7,7 +7,7 @@ on:
 
 jobs:
   fetch-swaggers:
-    runs-on: ubuntu-latest
+    runs-on: mikefarah/yq
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -21,6 +21,24 @@ jobs:
       - name: Fetch Okta management Swagger
         run: curl -L https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/resources/3.0/management.yaml -o okta/management-swagger-v3.yaml
 
+      - name: Delete invalid AppUserSchemaResponse node in swagger
+        run: yq -i 'del(.components.examples.AppUserSchemaResponse.value.properties.profile.allOf)' okta/management-swagger-v3.yaml
+
+      - name: Update AppUserSchemaResponse node with valid value
+        run: yq -i '.components.examples.AppUserSchemaResponse.value.properties.profile.type="object"' okta/management-swagger-v3-updated.yaml
+      
+      - name: Delete invalid GroupSchemaResponse node in swagger
+        run: yq -i 'del(.components.examples.AppUserSchemaResponse.value.properties.profile.allOf)' okta/management-swagger-v3.yaml
+
+      - name: Update GroupSchemaResponse node with valid value
+        run: yq -i '.components.examples.AppUserSchemaResponse.value.properties.profile.type="object"' okta/management-swagger-v3-updated.yaml
+    
+      - name: Delete invalid UserSchemaResponse node in swagger
+        run: yq -i 'del(.components.examples.AppUserSchemaResponse.value.properties.profile.allOf)' okta/management-swagger-v3.yaml
+
+      - name: Update UserSchemaResponse node with valid value
+        run: yq -i '.components.examples.AppUserSchemaResponse.value.properties.profile.type="object"' okta/management-swagger-v3-updated.yaml
+
       - name: Open PR
         uses: peter-evans/create-pull-request@v3
         with:
@@ -32,4 +50,3 @@ jobs:
           body: Update Okta Swagger
           commit-message: Auto update Okta swagger
           token: ${{ secrets.GITHUB_TOKEN }}
-          
