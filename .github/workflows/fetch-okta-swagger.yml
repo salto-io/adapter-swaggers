@@ -7,7 +7,7 @@ on:
 
 jobs:
   fetch-swaggers:
-    runs-on: mikefarah/yq
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -20,6 +20,18 @@ jobs:
 
       - name: Fetch Okta management Swagger
         run: curl -L https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/resources/3.0/management.yaml -o okta/management-swagger-v3.yaml
+
+      - name: Install yq
+        run: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
+
+      - name: Install yq
+        run: add-apt-repository ppa:rmescandon/yq
+      
+      - name: Install yq
+        run: apt update
+      
+      - name: Install yq
+        run: apt install yq -y
 
       - name: Delete invalid AppUserSchemaResponse node in swagger
         run: yq -i 'del(.components.examples.AppUserSchemaResponse.value.properties.profile.allOf)' okta/management-swagger-v3.yaml
