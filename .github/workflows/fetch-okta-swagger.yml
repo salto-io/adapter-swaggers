@@ -1,0 +1,34 @@
+name: Fetch Okta Swagger
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  fetch-swaggers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Extract git commit data
+        uses: rlespinasse/git-commit-data-action@v1.x
+
+      - name: Create Okta folder
+        run: mkdir -p okta
+
+      - name: Fetch Okta management Swagger
+        run: curl -L https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/resources/3.0/management.yaml -o okta/management-swagger-v3.yaml
+
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: "latest-okta"
+          base: main
+          title: "Update Okta Swagger"
+          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
+          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}">
+          body: Update Okta Swagger
+          commit-message: Auto update Okta swagger
+          token: ${{ secrets.GITHUB_TOKEN }}
