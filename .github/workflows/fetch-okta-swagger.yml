@@ -32,3 +32,4 @@ jobs:
           body: Update Okta Swagger
           commit-message: Auto update Okta swagger
           token: ${{ secrets.GITHUB_TOKEN }}
+          
