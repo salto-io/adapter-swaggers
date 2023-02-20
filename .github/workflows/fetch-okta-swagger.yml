@@ -31,16 +31,16 @@ jobs:
         run: yq -i '.components.examples.AppUserSchemaResponse.value.properties.profile.type="object"' okta/management-swagger-v3.yaml
       
       - name: Delete invalid GroupSchemaResponse node in swagger
-        run: yq -i 'del(.components.examples.AppUserSchemaResponse.value.properties.profile.allOf)' okta/management-swagger-v3.yaml
+        run: yq -i 'del(.components.examples.GroupSchemaResponse.value.properties.profile.allOf)' okta/management-swagger-v3.yaml
 
       - name: Update GroupSchemaResponse node with valid value
-        run: yq -i '.components.examples.AppUserSchemaResponse.value.properties.profile.type="object"' okta/management-swagger-v3.yaml
+        run: yq -i '.components.examples.GroupSchemaResponse.value.properties.profile.type="object"' okta/management-swagger-v3.yaml
     
       - name: Delete invalid UserSchemaResponse node in swagger
-        run: yq -i 'del(.components.examples.AppUserSchemaResponse.value.properties.profile.allOf)' okta/management-swagger-v3.yaml
+        run: yq -i 'del(.components.examples.UserSchemaResponse.value.properties.profile.allOf)' okta/management-swagger-v3.yaml
 
       - name: Update UserSchemaResponse node with valid value
-        run: yq -i '.components.examples.AppUserSchemaResponse.value.properties.profile.type="object"' okta/management-swagger-v3.yaml
+        run: yq -i '.components.examples.UserSchemaResponse.value.properties.profile.type="object"' okta/management-swagger-v3.yaml
 
       - name: Open PR
         uses: peter-evans/create-pull-request@v3
